@@ -63,6 +63,18 @@ def parse_float(value: object, default: float = math.nan) -> float:
         return default
 
 
+def first_valid_float(
+    row: dict[str, str],
+    names: list[str],
+    default: float = math.nan,
+) -> float:
+    for name in names:
+        value = parse_float(row.get(name), math.nan)
+        if math.isfinite(value):
+            return value
+    return default
+
+
 def read_csv_rows(path: Path) -> list[dict[str, str]]:
     if not path.exists():
         raise FileNotFoundError(f"Could not find CSV file: {path}")
@@ -128,10 +140,10 @@ def build_results(
 
         earth = earth_midpoint_rows[quarter]
 
-        exo_global = parse_float(exo.get("global_temp_k"))
-        exo_north = parse_float(exo.get("north_pole_temp_k"))
-        exo_equator = parse_float(exo.get("equator_temp_k"))
-        exo_south = parse_float(exo.get("south_pole_temp_k"))
+        exo_global = first_valid_float(exo, ["global_temp_k", "exoplanet_global_temp_k"])
+        exo_north = first_valid_float(exo, ["north_pole_temp_k", "exoplanet_north_pole_temp_k"])
+        exo_equator = first_valid_float(exo, ["equator_temp_k", "exoplanet_equator_temp_k"])
+        exo_south = first_valid_float(exo, ["south_pole_temp_k", "exoplanet_south_pole_temp_k"])
 
         earth_global = parse_float(earth.get("global_temp_k"))
         earth_north = parse_float(earth.get("north_pole_temp_k"))
