@@ -10,6 +10,40 @@ planet, and overlay several planets for comparison.
 > does not model an atmosphere, greenhouse warming, oceans, clouds, or heat
 > capacity.
 
+## The problem
+
+Exoplanet catalogues contain orbital periods, scales, eccentricities, host-star
+properties, and several competing literature solutions, but those columns do not
+immediately show how one planet's distance, speed, and equilibrium temperature
+change around an orbit. The project asks how far a transparent two-body model can
+take that comparison, and which assumptions become dominant when catalogue
+values are missing.
+
+## The approach
+
+The simulator resolves one usable solution per planet/host identity, derives a
+consistent two-body period from the chosen scale and masses, samples the orbit
+uniformly in elapsed time, and solves Kepler's equation at every sample. Vis-viva
+provides speed and a redistributed black-body calculation provides equilibrium
+temperature. The older catalogue-wide scripts separately compare the processed
+quarter-orbit rows with matching Earth rows.
+
+## What I found
+
+The bundled 149,648 quarter rows reduce to 6,284 selectable planet/host
+identities. The per-planet profiles recover the expected coupled behaviour:
+periapsis is the closest, fastest, and hottest part of an eccentric orbit, while
+the size of that variation grows with eccentricity. The catalogue-wide figures
+also expose broad relationships between orbital period, speed, distance, host
+mass, and the modelled temperatures.
+
+Those plots are descriptive rather than a search for Earth analogues. Every
+quarter row with a matching Earth phase is included, missing luminosities and
+masses can fall back to strong defaults, and the repository does not contain the
+original catalogue query or retrieval date. The most important finding is
+therefore methodological: the orbit can be made internally consistent, but the
+quality and provenance of the inputs still limit the scientific conclusion.
+
 ## Features
 
 - Loads both NASA-style exoplanet columns and the bundled processed catalogue.
